@@ -18,9 +18,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/products', function () {
-    return view('products');
-});
+// Route::get('/products', function () {
+//     return view('products');
+// });
 
 Route::get('/product_details', function () {
     return view('product_details');
@@ -33,5 +33,10 @@ Route::get('/account', function () {
 Route::get('/cart', function () {
     return view('cart');
 });
-Route::resource('/product', ProductController::class);
+Route::resource('/products', ProductController::class);
 Route::resource('/users', UserController::class);
+
+Route::get('/admin_products', 'UserController@addProduct');
+
+Route::get('/test', 'ProductController@test');
+Route::post('/add', 'ProductController@addProduct')->name('add');

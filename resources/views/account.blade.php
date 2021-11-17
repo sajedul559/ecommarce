@@ -13,7 +13,7 @@
                     <div class="form-btn">
                         <span onclick="register()">Register</span>
                         <span onclick="login()">Login</span>
-                        <hr id="Indicator">
+                        <hr id="Indicator"> 
                     </div>
                     <form id="LoginForm" action="/users" method="GET">
                         @csrf
