@@ -44,9 +44,30 @@
     <div class="container">
 
         <div class="row">
-            <div class="col-2">
+            
+            {{-- <div class="col-2">
                 <img src="{{ asset('images/image1.png')}}" width="100%">
+            </div> --}}
+            <div class="col-xs-8">
+                <div class="row">
+                    @foreach($returnProducts as $product)
+                        <div class="col-xs-4" style="padding: 10px;">
+                            <img src="{{asset($product['image'])}}" height="200" width="150">
+                            <h4> {{$product['name']}}</h4>
+                            <div class="rating">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star-o"></i>
+                            </div>
+                            <p>{{$product['price']}}</p>
+                        </div>
+                     @endforeach
+
+                </div>
             </div>
+            
             <div class="col-xs-4">
                 <div class="form-container">
                     <div class="form-btn">

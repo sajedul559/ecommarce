@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class ProductController extends Controller
 {
@@ -13,11 +13,11 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function allProduct()
     {
-        
-        //return 'Index Method!';
-        return view('products');
+
+        $products = Product::paginate(3);
+        return view('products', compact('products'));
     }
 
     /**
@@ -38,26 +38,30 @@ class ProductController extends Controller
      */
     public function addProduct(Request $request)
     {
-        
-        $product= new Product();
-        $product->name= $request->has('name')? $request->get('name'):'';
-        $product->price= $request->has('price')? $request->get('price'):'';
-        $product->amount= $request->has('amount')? $request->get('amount'):'';
-        $product->is_active= 1;
 
-        if($request->hasFile('images')){
+        $product = new Product();
+        $product->name = $request->has('name') ? $request->get('name') : '';
+        $product->price = $request->has('price') ? $request->get('price') : '';
+        $product->amount = $request->has('amount') ? $request->get('amount') : '';
+        $product->is_active = 1;
+
+        if ($request->hasFile('images')) {
             $files = $request->file('images');
             $imagesLocation = array();
             $i = 0;
-            foreach($files as $file)
-            {
+            foreach ($files as $file) {
                 $extension = $file->getClientOriginalExtension();
-                $fileName = 'product_'.time(). ++$i. '.'.$extension;
-
+                $fileName = 'product_' . time() . ++$i . '.' . $extension;
+                $location = '/images/uploads/';
+                $file->move(public_path() . $location, $fileName);
+                $imagesLocation[] = $location . $fileName;
             }
+            $product->image = implode('|', $imagesLocation);
+            $product->save();
+            return back()->with('success', 'Product Successfully Saved!');
+        } else {
+            return back()->with('error', 'Product Was not saved successfully');
         }
-        $product->save();
-        return back()->with('success', 'Product Successfully Saved!');
     }
 
     /**
@@ -66,9 +70,16 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function productDetails(Request $request, $id)
     {
-        //
+        $product = Product::find($id);
+
+        $relatedProducts = Product::where('category_id', $product->category_id)->where('id', '!=', $product->id)->limit(3)->get();
+
+
+        $image = explode('|', $product->image);
+
+        return view('product_details', compact('product', 'image', 'relatedProducts'));
     }
 
     /**
@@ -108,5 +119,49 @@ class ProductController extends Controller
     public function test()
     {
         return "hello word";
+    }
+
+    public function viewProduct()
+    {
+        $products = Product::all();
+        $returnProducts = array();
+        foreach ($products as $product) {
+            $images = explode('|', $product->image);
+
+            $returnProducts[] = [
+                'name' => $product->name,
+                'price' => $product->price,
+                'amount' => $product->amount,
+                'image' => $images[0]
+
+            ];
+        }
+
+        return view('add_product', compact('returnProducts'));
+    }
+
+    public function addToCart(Request $request)
+    {
+        $id = $request->has('pid') ? $request->get('pid') : '';
+        $name = $request->has('name') ? $request->get('name') : '';
+        $quantity = $request->has('quantity') ? $request->get('quantity') : '';
+        $size = $request->has('size') ? $request->get('size') : '';
+        $price = $request->has('price') ? $request->get('price') : '';
+
+        $images = Product::find($id)->image;
+        $image = explode('|', $images)[0];
+
+        $cart = Cart::content()->where('id', $id)->first();
+
+        if (isset($cart) && $cart != null) {
+            $quantity = ((int)$quantity + (int)$cart->qty);
+            $total = (int)$quantity * (int)$price;
+            Cart::update($cart->rowId, ['qty' => $quantity, 'option' => ['size' => $size, 'image' => $image, 'total' => $total]]);
+        } else {
+            $total = ((int)$quantity * (int)$price);
+            Cart::add($id, $name, $quantity, $price, ['size' => $size, 'image' => $image, 'total' => $total]);
+        }
+
+        return redirect()->route('show.product')->with('success', 'Product addTo cart success');
     }
 }

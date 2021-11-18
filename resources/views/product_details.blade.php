@@ -5,48 +5,57 @@
 <div class="container">
    
 </div>
-
 <!-- Single Products -->
 <div class="small-container single-product">
     <div class="row">
         <div class="col-2">
-            <img src="{{ asset('images/gallery-1.jpg')}}" width="100%" id="ProductImg">
+            <img src="{{ asset($image[0])}}" width="100%" id="ProductImg">
 
             <div class="small-img-row">
+               
+                @if(isset($image[1]))
                 <div class="small-img-col">
-                    <img src="{{ asset('images/gallery-1.jpg')}}" width="100%" class="small-img">
+                    <img src="{{ asset($image[1])}}"  width="100%" class="small-img">
                 </div>
+                @endif @if(isset($image[2]))
                 <div class="small-img-col">
-                    <img src="{{ asset('images/gallery-2.jpg')}}" width="100%" class="small-img">
+                    <img src="{{ asset($image[1])}}"  width="100%" class="small-img">
                 </div>
+                @endif @if(isset($image[3]))
                 <div class="small-img-col">
-                    <img src="{{ asset('images/gallery-3.jpg')}}" width="100%" class="small-img">
+                    <img src="{{ asset($image[1])}}"  width="100%" class="small-img">
                 </div>
-                <div class="small-img-col">
-                    <img src="{{ asset('images/gallery-4.jpg')}}" width="100%" class="small-img">
-                </div>
+                @endif
+               
             </div>
 
         </div>
         <div class="col-2">
-            <p>Home / T-Shirt</p>
-            <h1>Red Printed T-Shirt by HRX</h1>
-            <h4>$50.00</h4>
-            <select>
-                <option>Select Size</option>
-                <option>XXL</option>
-                <option>XL</option>
-                <option>L</option>
-                <option>M</option>
-                <option>S</option>
-            </select>
-            <input type="number" value="1">
-            <a href="" class="btn">Add To Cart</a>
+            <p> Category:{{$product->category->category_name}}</p>
+            <h1>{{$product->name}}</h1>
+            <h4>Price:{{$product->price}}</h4>
+            <form action="/add-to-cart" method="POST">
+                @csrf 
+                <select name="size">
+                    <option value="">Select Size</option>
+                    <option value="XXL">XXL</option>
+                    <option value="XL">XL</option>
+                    <option value="L">L</option>
+                    <option value="M">M</option>
+                    <option value="S">S</option>
+                </select>
+                <input type="hidden" name="pid"  value="{{ $product->id }}">
+                <input type="hidden" name="price"  value="{{ $product->price }}">
+                <input type="hidden" name="name"  value="{{ $product->name }}">
+
+                <label for="">Amount</label>
+                <input type="number" name="quantity" value="1">
+                <button type="submit" class="btn">Add To Cart</button>
+          </form>
 
             <h3>Product Details <i class="fa fa-indent"></i></h3>
             <br>
-            <p>Give your summer wardrobe a style upgrade with the HRX Men's Active T-Shirt. Team it with a pair of
-                shorts for your morning workout or a denims for an evening out with the guys.</p>
+            <p>{{$product->details}}</p>
         </div>
     </div>
 </div>
@@ -60,9 +69,10 @@
 <!-- Products -->
 <div class="small-container">
     <div class="row">
+        @foreach($relatedProducts as $related)
         <div class="col-4">
-            <img src="{{ asset('images/product-9.jpg')}}">
-            <h4>Red Printed T-Shirt</h4>
+            <a href="{{url('/product/details/'.$related->id)}}">   <img src="{{ asset(explode('|',$related->image)[0])}}"></a>
+            <h4>{{$related->name}}</h4>
             <div class="rating">
                 <i class="fa fa-star"></i>
                 <i class="fa fa-star"></i>
@@ -70,44 +80,10 @@
                 <i class="fa fa-star"></i>
                 <i class="fa fa-star-o"></i>
             </div>
-            <p>$50.00</p>
+            <p>{{$related->price}}</p>
         </div>
-        <div class="col-4">
-            <img src="{{ asset('images/product-10.jpg')}}">
-            <h4>Red Printed T-Shirt</h4>
-            <div class="rating">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star-o"></i>
-            </div>
-            <p>$50.00</p>
-        </div>
-        <div class="col-4">
-            <img src="{{ asset('images/product-11.jpg')}}">
-            <h4>Red Printed T-Shirt</h4>
-            <div class="rating">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star-o"></i>
-            </div>
-            <p>$50.00</p>
-        </div>
-        <div class="col-4">
-            <img src="{{ asset('images/product-12.jpg')}}">
-            <h4>Red Printed T-Shirt</h4>
-            <div class="rating">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star-o"></i>
-            </div>
-            <p>$50.00</p>
-        </div>
+        @endforeach
+      
     </div>
 </div>
 

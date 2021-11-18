@@ -99,7 +99,5 @@ class UserController extends Controller
         //
     }
 
-    public function addProduct(){
-        return view('add_product');
-    }
+    
 }

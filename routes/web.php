@@ -36,7 +36,13 @@ Route::get('/cart', function () {
 Route::resource('/products', ProductController::class);
 Route::resource('/users', UserController::class);
 
-Route::get('/admin_products', 'UserController@addProduct');
+Route::get('/admin_products', 'ProductController@viewProduct');
 
 Route::get('/test', 'ProductController@test');
 Route::post('/add', 'ProductController@addProduct')->name('add');
+
+Route::get('/product/show', 'ProductController@allProduct')->name('show.product');
+
+Route::get('/product/details/{id}', 'ProductController@productDetails')->name('product.details');
+
+Route::post('/add-to-cart','ProductController@addToCart')->name('add.cart');
