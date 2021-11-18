@@ -46,3 +46,4 @@ Route::get('/product/show', 'ProductController@allProduct')->name('show.product'
 Route::get('/product/details/{id}', 'ProductController@productDetails')->name('product.details');
 
 Route::post('/add-to-cart','ProductController@addToCart')->name('add.cart');
+Route::get('/view-cart','ProductController@viewCart')->name('view.cart');

@@ -39,65 +39,35 @@
                 <th>Quantity</th>
                 <th>Subtotal</th>
             </tr>
-            <tr>
-                <td>
-                    <div class="cart-info">
-                        <img src="{{ asset('images/buy-1.jpg')}}">
-                        <div>
-                            <p>Red Printed T-Shirt</p>
-                            <small>Price: $50.00</small>
-                            <br>
-                            <a href="">Remove</a>
+            @foreach($carts as $cart)
+                <tr>
+                    <td>
+                        <div class="cart-info">
+                            <img src="{{ asset($cart->options['image'])}}">
+                            <div>
+                                <p>{{$cart->name}}</p>
+                                <small>Price: ${{$cart->price}}</small>
+                                <br>
+                                <a href="">Remove</a>
+                            </div>
                         </div>
-                    </div>
-                </td>
-                <td><input type="number" value="1"></td>
-                <td>$50.00</td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="cart-info">
-                        <img src="{{ asset('images/buy-2.jpg')}}">
-                        <div>
-                            <p>Red Printed T-Shirt</p>
-                            <small>Price: $50.00</small>
-                            <br>
-                            <a href="">Remove</a>
-                        </div>
-                    </div>
-                </td>
-                <td><input type="number" value="1"></td>
-                <td>$50.00</td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="cart-info">
-                        <img src="{{ asset('images/buy-3.jpg')}}">
-                        <div>
-                            <p>Red Printed T-Shirt</p>
-                            <small>Price: $50.00</small>
-                            <br>
-                            <a href="">Remove</a>
-                        </div>
-                    </div>
-                </td>
-                <td><input type="number" value="1"></td>
-                <td>$50.00</td>
-            </tr>
+                    </td>
+                    <td>{{ $cart->qty}}</td>
+                    <td>{{$cart->options['total']}}</td>
+                </tr>
+            @endforeach
+
+          
         </table>
         <div class="total-price">
             <table>
                 <tr>
                     <td>Subtotal</td>
-                    <td>$200.00</td>
+                    <td>{{$subtotal}}</td>
                 </tr>
+               
                 <tr>
-                    <td>Tax</td>
-                    <td>$35.00</td>
-                </tr>
-                <tr>
-                    <td>Total</td>
-                    <td>$230.00</td>
+                   <button class="btn btn--success">Checkout</button>
                 </tr>
             </table>
         </div>

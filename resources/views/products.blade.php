@@ -29,7 +29,7 @@
                     <li><a href="{{ url('/account')}}">Account</a></li>
                 </ul>
             </nav>
-            <a href="{{ url('/cart')}}"><img src="{{ asset('images/cart.png')}}" width="30px" height="30px"></a>
+            <a href="{{ url('/view-cart')}}"><img src="{{ asset('images/cart.png')}}" width="30px" height="30px"></a>
             <img src="{{ asset('images/menu.png')}}" class="menu-icon" onclick="menutoggle()">
         </div>
     </div>

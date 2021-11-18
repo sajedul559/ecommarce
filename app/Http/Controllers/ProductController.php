@@ -164,4 +164,11 @@ class ProductController extends Controller
 
         return redirect()->route('show.product')->with('success', 'Product addTo cart success');
     }
+
+    public function viewCart()
+    {
+        $carts = Cart::content();
+        $subtotal = Cart::subtotal();
+        return view('cart', compact('carts', 'subtotal'));
+    }
 }
