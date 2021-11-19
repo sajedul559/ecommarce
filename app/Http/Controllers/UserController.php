@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    public function __construct(){
+        $this->middleware('checkuser')->only('store');
+
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,15 +18,22 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+      
         $uName= $request->has('uname')?$request->get('uname'):'';
         $pass= $request->has('pass')?$request->get('pass'):'';
 
         $userInfo= User::where('name','=', $uName)->where('password', '=', $pass)->first();
 
-        if(isset($userInfo)&& $userInfo!=null){
-            return redirect('/admin_products');
+      
+
+        if( $userInfo){
+            
+           
+             return redirect()->route('admin.product');
         } else{
-            return redirect()->back();
+            return "user picena";
+
+            // return redirect()->back();
         }
     }
 
@@ -99,5 +110,9 @@ class UserController extends Controller
         //
     }
 
+    public function account()
+    {
+        return view('account');
+    }
     
 }

@@ -14,29 +14,31 @@ use App\Http\Controllers\ProductController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 // Route::get('/products', function () {
 //     return view('products');
 // });
 
+
 Route::get('/product_details', function () {
     return view('product_details');
 });
 
-Route::get('/account', function () {
-    return view('account');
-});
+// Route::get('/account', function () {
+//     return view('account')->name('account');
+// });
+Route::get('/account','UserController@account')->name('account');
 
-Route::get('/cart', function () {
-    return view('cart');
-});
+// Route::get('/cart', function () {
+//     return view('cart');
+// });
 Route::resource('/products', ProductController::class);
 Route::resource('/users', UserController::class);
 
-Route::get('/admin_products', 'ProductController@viewProduct');
+Route::get('/admin_products', 'ProductController@viewProduct')->name('admin.product');
 
 Route::get('/test', 'ProductController@test');
 Route::post('/add', 'ProductController@addProduct')->name('add');
@@ -47,3 +49,12 @@ Route::get('/product/details/{id}', 'ProductController@productDetails')->name('p
 
 Route::post('/add-to-cart','ProductController@addToCart')->name('add.cart');
 Route::get('/view-cart','ProductController@viewCart')->name('view.cart');
+
+Route::get('/remove-item/{rowId}','ProductController@removeItem')->name('view.cart');
+
+Route::get('/','ProductController@home')->name('home');
+
+Route::post('/products/validate-amount', '\App\Http\Controllers\ProductController@validateAmount');
+
+
+

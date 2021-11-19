@@ -29,7 +29,7 @@
                         <input type="email" name="email" placeholder="Email">
                         <input type="text" name="mobile" placeholder="Mobile">
                         <input type="password" name="pass" placeholder="Password" required>
-                        <button type="submit" class="btn">Register</button>
+                        <button name="reg" type="submit" class="btn">Register</button>
                     </form>
                 </div>
             </div>

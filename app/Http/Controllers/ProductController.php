@@ -171,4 +171,36 @@ class ProductController extends Controller
         $subtotal = Cart::subtotal();
         return view('cart', compact('carts', 'subtotal'));
     }
+    public function removeItem($rowId)
+    {
+        Cart::remove($rowId);
+        return redirect('/view-cart')->with('success', 'Product remove success');
+
+
+
+    }
+
+    public function home()
+    {
+        $featured_product = Product::orderBy('price','desc')->limit(4)->get();
+        $latest_product  = Product::orderBy('created_at','desc')->limit(2)->get();
+        return view('welcome',compact('featured_product','latest_product'));
+
+    }
+    public function validateAmount(Request $request){
+        
+        $id= $request->has('pid')? $request->get('pid'):'';
+        $product_amount= Product::find($id)->amount;
+
+        if($request->has('qty') && $request->get('qty')>$product_amount){
+            return json_encode([
+                'success'=>true,
+                'message'=>'Product quantity must me less than '. $product_amount
+            ]);
+        } else{
+            return json_encode([
+                'success'=>false
+            ]);
+        }
+    }
 }
